@@ -1,3 +1,2 @@
 *.env
 *pyvenv.py
-accounts/create_superuser.py
