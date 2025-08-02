@@ -1,0 +1,150 @@
+{% load static %}
+{% load order_extras %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Meal Orders</title>
+  <link rel="stylesheet" href="{% static 'accounts/orders.css' %}">
+</head>
+<body>
+  <nav>
+    <a href="{% url 'home' %}">Home</a>
+    <a href="{% url 'orders' %}">Orders</a>
+    <a href="{% url 'exchange_qr' %}">Exchange QR</a>
+    <a href="{% url 'special_orders' %}">Special Orders</a>
+  </nav>
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <div class="wrapper">
+
+    <section class="wallet-section">
+      <h2>Wallet Balance</h2>
+      <p>{{ wallet }}</p>
+    </section>
+
+    <section class="today-section">
+      <h2>Today’s Orders ({{ today }})</h2>
+      <div class="slot-container">
+        {% for slot in slots %}
+          <div class="order-card">
+            <h3>{{ slot.name }}</h3>
+
+            {% if slot.id in today_orders %}
+              {% with booking=today_orders|dict_get:slot.id %}
+                <p>Status: {{ booking.status }}</p>
+                {% if booking.status == 'Booked' and cut_off|dict_get:slot.id %}
+                  <a href="{% url 'get_qr' booking.id %}" class="qr-button">Get QR</a>
+                {% endif %}
+                {% if booking.status == 'Booked' and today_flags|dict_get:slot.id%}
+                  <form method="post" action="{% url 'cancel_booking' booking.id %}">
+                    {% csrf_token %}
+                    <button class="cancel-btn">Cancel</button>
+                  </form>
+                {% endif %}
+              {% endwith %}
+            {% elif today_flags|dict_get:slot.id %}
+              <a href="{% url 'apply_confirm' slot.id 'today' %}" class="apply-btn">Order</a>
+            {% else %}
+              <p class="closed">Booking Closed</p>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="tomorrow-section">
+      <h2>Tomorrow’s Orders ({{ tomorrow }})</h2>
+      <div class="slot-container">
+        {% for slot in slots %}
+          <div class="order-card">
+            <h3>{{ slot.name }}</h3>
+            <p class="window">{{ window_text|dict_get:slot.name }}</p>
+
+            {% if slot.id in tomorrow_orders %}
+              {% with booking=tomorrow_orders|dict_get:slot.id %}
+                <p>Status: {{ booking.status }}</p>
+                {% if booking.qr_token %}
+                  <a href="{% url 'get_qr' booking.id %}" class="qr-button">Get QR</a>
+                {% endif %}
+                {% if booking.status == 'Booked' and tomorrow_flags|dict_get:slot.id %}
+                  <form method="post" action="{% url 'cancel_booking' booking.id %}">
+                    {% csrf_token %}
+                    <button class="cancel-btn">Cancel</button>
+                  </form>
+                {% endif %}
+              {% endwith %}
+            {% else %}
+              <a href="{% url 'apply_confirm' slot.id 'tomorrow' %}"
+                 class="apply-btn {% if not tomorrow_flags|dict_get:slot.id %}disabled{% endif %}">
+                 Order
+              </a>
+              {% if not tomorrow_flags|dict_get:slot.id %}<p class="closed">Booking Closed</p>{% endif %}
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="history-section">
+      <h2>Booking History</h2>
+      <table class="history-table">
+        <thead><tr><th>Meal</th><th>Date</th><th>Status</th><th>QR</th></tr></thead>
+        <tbody>
+          {% for b in combined_orders %}
+          <tr>
+            <td>{{ b.meal_type.name }}</td>
+            <td>{{ b.date }}</td>
+            <td>{{ b.status }}</td>
+            <td>
+              {% if b.status == "Booked" %}
+                {% if cut_off|dict_get:b.meal_type.id %}
+                  <a href="{% url 'get_qr' b.id %}">QR</a>
+                {% else %}
+                  -
+                {% endif %}
+              {% elif b.status == "Transferred_In" %}
+                {% if cut_off|dict_get:b.meal_type.id %}
+                  <a href="{% url 'get_qr' b.id %}">QR</a>
+                {% else %}
+                  -
+                {% endif %}
+              {% else %}
+                -
+              {% endif %}
+            </td>
+
+          </tr>
+          {% empty %}
+          <tr><td colspan="4">No bookings yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+    <section class="transaction-section">
+      <h2>Transactions</h2>
+      <table class="history-table">
+        <thead><tr><th>Date</th><th>Description</th><th>Amount</th></tr></thead>
+        <tbody>
+          {% for t in transactions %}
+            <tr>
+              <td>{{ t.date }}</td>
+              <td>{% if t.status == 'Booked' %}Booked {{ t.meal_type.name }}{% else %}Refunded {{ t.meal_type.name }}{% endif %}</td>
+              <td>{% if t.status == 'Booked' %}-{{ t.meal_type.price }}Rs{% else %}+{{ t.meal_type.price }}Rs{% endif %}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="3">No transactions yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+  </div>
+</body>
+</html>

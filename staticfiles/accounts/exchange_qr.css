@@ -1,0 +1,170 @@
+
+:root {
+  --accent-color: #8672FF;
+  --base-color: white;
+  --text-color: #2E2B41;
+  --input-color: #f3f0ff;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  background-color: var(--base-color);
+  color: var(--text-color);
+}
+
+nav {
+  width: 90%;
+  max-width: 1100px;
+  margin: 20px auto 30px;
+  padding: 10px 20px;
+  border-radius: 50px;
+  background-color: var(--accent-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 15px;
+  font-size: clamp(0.6rem, 2vw, 1.1rem);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+nav a {
+  color: var(--base-color);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: #eaea26ef;
+}
+
+.main-content {
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  width: min(90%, 600px);
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+}
+
+.page-title {
+  text-align: center;
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.message-container {
+  margin-bottom: 1rem;
+}
+
+.message-item {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  background-color: #e7e5ff;
+  color: var(--text-color);
+}
+
+.form-section h2 {
+  margin-bottom: 0.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+input[type="email"],
+input[type="date"],
+select {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: var(--input-color);
+  font-size: 1rem;
+  color: var(--text-color);
+}
+
+.otp-input-group {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.otp-input {
+  width: 3rem;
+  height: 3rem;
+  text-align: center;
+  font-size: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: var(--input-color);
+  color: var(--text-color);
+}
+
+.otp-info {
+  font-size: 0.9rem;
+  color: #777;
+}
+
+.btn {
+  background-color: var(--accent-color);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #6f5bf7;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-gray-600 {
+  color: #666;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.text-xl {
+  font-size: 1.25rem;
+}

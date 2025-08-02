@@ -1,0 +1,94 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signup</title>
+  <link rel="stylesheet" href="{% static 'accounts/style.css' %}">
+</head>
+<body>
+  <div class="wrapper">
+    <h1>Signup</h1>
+    {% if error_message %}
+      <p style="color:red; " >{{ error_message }}</p>
+    {% endif %}
+    {% if success_message %}
+      <p style="color:green;">{{ success_message }}</p>
+    {% endif %}
+
+    <form method="post" action="{% url 'signup' %}" >
+      {% csrf_token %}
+  
+      <div>
+        <label for="name">
+          <img src="{% static 'accounts/person_24dp_E3E3E3_FILL1_wght400_GRAD0_opsz24.svg' %}" alt="Firstname Icon">
+        </label>
+        <input required type="text" id="name" name="name" placeholder="Student name">
+      </div>
+
+      <div>
+        <label for="rollnumber">
+          <img src="{% static 'accounts/school_24dp_E3E3E3_FILL1_wght400_GRAD0_opsz24.svg' %}" alt="student Icon">
+        </label>
+        <input required type="text" id="rollnumber" name="rollnumber" placeholder="Rollnumber">
+      </div>
+
+
+      <div>
+        <label for="department">
+          <img src="{% static 'accounts/engineering_24dp_E3E3E3_FILL1_wght400_GRAD0_opsz24.svg' %}" alt="Engineering Icon">
+         </label>
+        <select required id="department" name="department">
+          <option value="" disabled selected>Select Department</option>
+          <option value="CSE">Computer Science & Engineering</option>
+          <option value="ECE">Electronics & Communication Engineering</option>
+          <option value="EEE">Electrical & Electronics Engineering</option>
+          <option value="ME">Mechanical Engineering</option>
+          <option value="CE">Civil Engineering</option>
+          <option value="CHE">Chemical Engineering</option>
+          <option value="AE">Aerospace Engineering</option>
+        </select>
+      </div>
+
+      <div>
+       <label for="gender">
+        <img src="{% static 'accounts/group_24dp_E3E3E3_FILL1_wght400_GRAD0_opsz24.svg' %}" alt="Gender Icon">
+       </label>
+       <select required id="gender" name="gender">
+        <option value="" disabled selected>Select Gender</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+       </select>
+      </div>
+
+      <div>
+        <label for="email">
+          <span>@</span>
+        </label>
+        <input required type="email" id="email" name="email" placeholder="Email">
+      </div>
+
+      <div>
+        <label for="password">
+          <img src="{% static 'accounts/lock_24dp_E3E3E3_FILL1_wght400_GRAD0_opsz24.svg' %}" alt="Password Icon">
+        </label>
+        <input required type="password" id="password" name="password" placeholder="Password">
+      </div>
+
+      <div>
+        <label for="repeat-password">
+          <img src="{% static 'accounts/lock_24dp_E3E3E3_FILL1_wght400_GRAD0_opsz24.svg' %}" alt="Repeat Password Icon">
+        </label>
+        <input required type="password" id="repeat-password" name="repeat_password" placeholder="Repeat password">
+      </div>
+
+      <button type="submit"> Signup </a></button>
+      <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+    </form>
+
+  </div>
+</body>
+</html>

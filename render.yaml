@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: smart-meal-management
+    env: python
+    region: oregon
+    buildCommand: |
+      pip install -r requirements.txt
+      python manage.py makemigrations
+      python manage.py migrate
+      python manage.py collectstatic --noinput
+    startCommand: gunicorn Smart_Meal_Management_System.wsgi:application
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: SmartMealDB  
+          property: connectionString
+      - key: SECRET_KEY
+        value: django-insecure-1li!-!0h%97-)(&8eg@mr5q&=h-6lmb#^c&5en5=0ttal2h@tg
+      - key: DJANGO_SETTINGS_MODULE
+        value: Smart_Meal_Management_System.settings
+      - key: EMAIL_HOST_USER
+        value: noreplymymessbooking@gmail.com
+      - key: EMAIL_HOST_PASSWORD
+        value: smlz qwcw bksm wvlb
+      - key: DEBUG
+        value: 'False'
+    plan: free
+
+databases:
+  - name: SmartMealDB  
+    databaseName: Smart_Meal_Management_System  
+
