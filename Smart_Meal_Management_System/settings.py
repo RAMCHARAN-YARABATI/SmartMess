@@ -74,9 +74,11 @@ WSGI_APPLICATION = 'Smart_Meal_Management_System.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+
 DATABASES = {
-    'default': dj_database_url.config(default=os.environ.get('postgresql://smart_meal_db_3irs_user:Z5RCDyZZ9q1M1dSH4laKcbOozVB7wN6s@dpg-d27ic2fdiees73cl59fg-a.oregon-postgres.render.com/smart_meal_db_3irs'))
+    'default': dj_database_url.config(default='postgresql://smart_meal_db_3irs_user:Z5RCDyZZ9q1M1dSH4laKcbOozVB7wN6s@dpg-d27ic2fdiees73cl59fg-a.oregon-postgres.render.com/smart_meal_db_3irs')
 }
+
 
 
 # Password validation
