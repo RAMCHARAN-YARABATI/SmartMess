@@ -98,15 +98,12 @@
   </div>
   <script>
     window.onload = function() {
-      const today = new Date().getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+      const today = new Date().getDay(); 
 
-    // Get all table rows inside tbody
       const rows = document.querySelectorAll("table tbody tr");
 
-    // Since your table starts from Monday, we shift days:
       const index = today === 0 ? 6 : today - 1;
 
-    // Add highlight class to today's row
       if (rows[index]) {
         rows[index].classList.add("highlight-today");
       }

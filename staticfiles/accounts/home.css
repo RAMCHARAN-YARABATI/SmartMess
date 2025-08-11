@@ -1,7 +1,5 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;900&display=swap');
 
-/* Color variables for easy theme changes */
 :root {
   --accent-color: #8672FF;
   --base-color: white;
@@ -10,7 +8,6 @@
   --hover-color: #eaea26ef;
 }
 
-/* Universal box-sizing for consistent padding and borders */
 * {
   margin: 0;
   padding: 0;
@@ -24,7 +21,7 @@ html {
   color: var(--text-color);
   text-align: center;
 }
-/* Base body styles, using viewport units and a fixed background image for consistent behavior */
+
 body {
   min-height: 100vh;
   background-image: url('/static/accounts/pexels-saveurssecretes-14831540.jpg');
@@ -41,8 +38,6 @@ body {
   font-weight: bold;
 }
 
-
-/* Navbar - uses max-width and flexbox for responsiveness */
 nav {
   width: 90%;
   max-width: 1100px;
@@ -53,7 +48,7 @@ nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap; /* Allows items to wrap to a new line on smaller screens */
+  flex-wrap: wrap; 
   gap: 10px;
   font-size: 1.1rem;
   font-weight: 600;
@@ -70,7 +65,6 @@ nav a:hover {
   color: var(--hover-color);
 }
 
-/* User Dropdown styles */
 .user-dropdown {
   position: relative;
 }
@@ -124,7 +118,6 @@ nav a:hover {
   color: #2E2B41;
 }
 
-/* Main container - uses max-width and percentage for fluidity */
 .container {
   background-color: rgba(0, 0, 0, 0.65);
   padding: 30px;
@@ -136,14 +129,12 @@ nav a:hover {
   backdrop-filter: blur(6px);
 }
 
-/* Headings */
 h2 {
   color: var(--hover-color);
   margin-bottom: 20px;
   text-align: center;
 }
 
-/* Instructions List */
 .instructions ul {
   list-style: none;
   padding-left: 0;
@@ -155,7 +146,6 @@ h2 {
   line-height: 1.6;
 }
 
-/* Table Styles - uses a percentage width to adapt to the container */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -179,13 +169,11 @@ th, td {
   border-bottom: 1px solid #ddd;
 }
 
-
-/* Styles for devices with a max-width of 768px (e.g., tablets and large phones) */
 @media (width: clamp(200px, 50%, 1790px)) {
   nav {
     width:90%;
     display: flex;
-    flex-direction: row; /* Overrides the previous media query to keep the nav items in a row */
+    flex-direction: row; 
     align-items: center;
     justify-content: space-between;
     font-size: 0.95rem;
@@ -198,7 +186,7 @@ th, td {
   .dropdown-content {
     right: 0;
     left: 0;
-    width: 90vw; /* Makes the dropdown take up 90% of the viewport width */
+    width: 90vw; 
   }
 
   h2 {

@@ -1,4 +1,6 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;900&display=swap');
+
 :root {
   --accent-color: #8672FF;
   --base-color: white;
@@ -6,26 +8,41 @@
   --input-color: #f3f0ff;
 }
 
-body {
-  font-family: 'Inter', sans-serif;
+* {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  border: none;
+}
+
+html {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(12pt, 2vw, 14pt); 
+  color: var(--text-color);
+  text-align: center;
+}
+
+body {
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
   background-color: var(--base-color);
   color: var(--text-color);
+  overflow-x: hidden;
 }
 
 nav {
   width: 90%;
   max-width: 1100px;
-  margin: 20px auto 30px;
-  padding: 10px 20px;
+  margin: 10px auto 20px;
+  padding: 10px;
   border-radius: 50px;
   background-color: var(--accent-color);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
+  flex-wrap: wrap; 
   gap: 15px;
-  font-size: clamp(0.6rem, 2vw, 1.1rem);
+  font-size: clamp(0.8rem, 2vw, 1.1rem);
   font-weight: 600;
   text-transform: uppercase;
 }
@@ -40,6 +57,9 @@ nav a:hover {
   color: #eaea26ef;
 }
 
+/*
+ * Main content layout
+ */
 .main-content {
   padding: 2rem;
   display: flex;
@@ -56,11 +76,14 @@ nav a:hover {
 
 .page-title {
   text-align: center;
-  font-size: 1.75rem;
+  font-size: clamp(1.5rem, 4vw, 1.75rem); /* Responsive font size */
   font-weight: 700;
   margin-bottom: 1.5rem;
 }
 
+/*
+ * Form and message elements
+ */
 .message-container {
   margin-bottom: 1rem;
 }
@@ -107,10 +130,10 @@ select {
 }
 
 .otp-input {
-  width: 3rem;
-  height: 3rem;
+  width: clamp(2.5rem, 5vw, 3rem); /* Responsive width */
+  height: clamp(2.5rem, 5vw, 3rem); /* Responsive height */
   text-align: center;
-  font-size: 1.5rem;
+  font-size: clamp(1.2rem, 3vw, 1.5rem); /* Responsive font size */
   border-radius: 8px;
   border: 1px solid #ccc;
   background-color: var(--input-color);
@@ -118,10 +141,13 @@ select {
 }
 
 .otp-info {
-  font-size: 0.9rem;
+  font-size: clamp(0.8rem, 2vw, 0.9rem); /* Responsive font size */
   color: #777;
 }
 
+/*
+ * Button styling
+ */
 .btn {
   background-color: var(--accent-color);
   color: white;
@@ -137,6 +163,9 @@ select {
   background-color: #6f5bf7;
 }
 
+/*
+ * Utility classes
+ */
 .text-center {
   text-align: center;
 }
@@ -168,3 +197,57 @@ select {
 .text-xl {
   font-size: 1.25rem;
 }
+
+/*
+ * Responsive design via media queries
+ * This is the crucial part for ensuring consistency across devices.
+ * The previous media query was a bit too broad, so I've refined it.
+ */
+@media (max-width: 768px) {
+  /*
+   * Styles for tablets and smaller screens
+   */
+  .main-content {
+    padding: 1rem;
+  }
+
+  .container {
+    padding: 1.5rem;
+  }
+
+  nav {
+    flex-direction: row; 
+    justify-content: space-between;/* Stacks navigation items vertically */
+    border-radius: 20px; /* Adjusts border radius for a better mobile look */
+    text-align: center;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  /*
+   * Styles for small mobile phones
+   */
+  html {
+    font-size: 10pt; 
+  }
+
+  .page-title {
+    font-size: 1.25rem;
+  }
+  
+  .container {
+    padding: 1rem;
+  }
+
+  .otp-input-group {
+    gap: 0.5rem; 
+  }
+
+  .otp-input {
+    width: 2rem;
+    height: 2rem;
+    font-size: 1rem;
+  }
+}
+
