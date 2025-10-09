@@ -61,14 +61,17 @@ from .models import StudentUser
 # Thread-safe OTP storage
 otp_storage = {}
 
+import threading
+from django.core.mail import send_mail
 
 def send_async_mail(subject, message, from_email, recipient_list):
     def send():
         try:
             send_mail(subject, message, from_email, recipient_list, fail_silently=False)
         except Exception as e:
-            print(f"Email sending failed: {e}")  # Logs to Render
+            print(f"Email sending failed: {e}")  # Check Render logs
     threading.Thread(target=send).start()
+
 
 
 def send_otp_view(request):
