@@ -1,6 +1,6 @@
 
 import random,io, uuid, qrcode
-from django.shortcuts import render, redirect,get_object_or_404, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from .models import  StudentUser, BookingRecord, MealSlot, SpecialOrderSlot
 from django.contrib.auth.hashers import make_password
 from django.core.mail import send_mail
@@ -11,10 +11,6 @@ from django.contrib import messages
 from datetime import timedelta, datetime
 from django.views.decorators.http import require_POST
 from .utils  import SHOW_CUTOFF_TIMES, is_window_open, is_qr_visible_for_meal, is_special_order_window_open
-import threading
-from django.shortcuts import render, redirect
-from django.core.mail import send_mail
-
 
 
 
@@ -58,30 +54,20 @@ def signup_view(request):
 
 
 
-# Thread-safe OTP storage
+# Store OTPs temporarily
 otp_storage = {}
-
-# Utility function to send email asynchronously
-def send_async_mail(subject, message, from_email, recipient_list):
-    threading.Thread(
-        target=send_mail,
-        args=(subject, message, from_email, recipient_list),
-        kwargs={'fail_silently': False}
-    ).start()
-
 
 def send_otp_view(request):
     if request.method == 'POST':
         email = request.POST.get('email')
 
-        # Check if email exists
         if not StudentUser.objects.filter(email=email).exists():
             return render(request, 'accounts/login.html', {
-                'error': 'This email is not registered. Please sign up first.',
+                'error': ' This email is not registered. Please sign up first.',
                 'email': email
             })
+        ''' Also passes the email back so the user doesn't need to re-enter it.'''
 
-        # Check OTP input
         if 'otp1' in request.POST:
             otp_entered = ''.join([
                 request.POST.get('otp1', ''),
@@ -92,36 +78,33 @@ def send_otp_view(request):
 
             if otp_storage.get(email) == otp_entered:
                 request.session['user_email'] = email
-                # Clear OTP after successful login
-                otp_storage.pop(email, None)
                 return redirect('home')
             else:
                 return render(request, 'accounts/login.html', {
                     'email': email,
                     'otp_sent': True,
-                    'error': "Invalid OTP. Try again.",
+                    'error': " Invalid OTP. Try again.",
                 })
 
-        # Generate OTP and store
+        # Generate and send OTP
         otp = str(random.randint(1000, 9999))
         otp_storage[email] = otp
 
-        # Send OTP asynchronously
-        send_async_mail(
-            subject='Your One-Time Password (OTP) for MyMess',
-            message=f"""
+        send_mail(
+            subject = 'Your One-Time Password (OTP) for MyMess',
+            message = f"""
 Hello,
-
-Your One-Time Password (OTP) to log in to your MyMess account is: {otp}
+Your One-Time Password (OTP) to log in to your MyMess account is:OTP: {otp}
 Please enter this code within 5 minutes to complete your login.
 If you did not request this OTP, please ignore this message.
-
 Regards,  
-MyMess Team
-            """,
+MyMess Team  
+                    """,
             from_email='noreplymymessbooking@gmail.com',
-            recipient_list=[email]
+            recipient_list=[email],
+            fail_silently=False,
         )
+
 
         return render(request, 'accounts/login.html', {
             'email': email,
