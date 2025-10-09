@@ -133,8 +133,9 @@ EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'apikey'  # literally the word 'apikey'
-EMAIL_HOST_PASSWORD = os.environ.get('SENDGRID_API_KEY')  # your secret
-DEFAULT_FROM_EMAIL = 'noreplymymessbooking@gmail.com' 
+EMAIL_HOST_PASSWORD = os.environ.get('SENDGRID_API_KEY')
+DEFAULT_FROM_EMAIL = 'noreplymymessbooking@gmail.com'  # your verified sender
+ 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
