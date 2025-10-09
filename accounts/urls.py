@@ -29,8 +29,3 @@ if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) 
 
 
-try:
-    from accounts.create_superuser import run
-    run()
-except Exception as e:
-    print("Error creating superuser:", e)
