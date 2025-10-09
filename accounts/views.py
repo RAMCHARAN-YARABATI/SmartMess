@@ -1,5 +1,5 @@
 
-import random,io, uuid, qrcode, 
+import random,io, uuid, qrcode
 from django.shortcuts import render, redirect,get_object_or_404, redirect
 from .models import  StudentUser, BookingRecord, MealSlot, SpecialOrderSlot
 from django.contrib.auth.hashers import make_password
