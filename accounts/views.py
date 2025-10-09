@@ -61,13 +61,14 @@ from .models import StudentUser
 # Thread-safe OTP storage
 otp_storage = {}
 
-# Utility function to send email asynchronously
+
 def send_async_mail(subject, message, from_email, recipient_list):
-    threading.Thread(
-        target=send_mail,
-        args=(subject, message, from_email, recipient_list),
-        kwargs={'fail_silently': False}
-    ).start()
+    def send():
+        try:
+            send_mail(subject, message, from_email, recipient_list, fail_silently=False)
+        except Exception as e:
+            print(f"Email sending failed: {e}")  # Logs to Render
+    threading.Thread(target=send).start()
 
 
 def send_otp_view(request):
