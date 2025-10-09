@@ -1,6 +1,6 @@
 
-import random,io, uuid, qrcode
-from django.shortcuts import render, redirect,get_object_or_404
+import random,io, uuid, qrcode, threading
+from django.shortcuts import render, redirect,get_object_or_404, redirect
 from .models import  StudentUser, BookingRecord, MealSlot, SpecialOrderSlot
 from django.contrib.auth.hashers import make_password
 from django.core.mail import send_mail
@@ -11,6 +11,7 @@ from django.contrib import messages
 from datetime import timedelta, datetime
 from django.views.decorators.http import require_POST
 from .utils  import SHOW_CUTOFF_TIMES, is_window_open, is_qr_visible_for_meal, is_special_order_window_open
+
 
 
 
@@ -56,6 +57,12 @@ def signup_view(request):
 
 # Store OTPs temporarily
 otp_storage = {}
+def send_async_mail(subject, message, from_email, recipient_list):
+    threading.Thread(
+        target=send_mail,
+        args=(subject, message, from_email, recipient_list),
+        kwargs={'fail_silently': False}
+    ).start()
 
 def send_otp_view(request):
     if request.method == 'POST':
@@ -89,22 +96,22 @@ def send_otp_view(request):
         # Generate and send OTP
         otp = str(random.randint(1000, 9999))
         otp_storage[email] = otp
-
-        send_mail(
-            subject = 'Your One-Time Password (OTP) for MyMess',
-            message = f"""
+        
+        send_async_mail(
+            subject='Your One-Time Password (OTP) for MyMess',
+            message=f"""
 Hello,
-Your One-Time Password (OTP) to log in to your MyMess account is:OTP: {otp}
+
+Your One-Time Password (OTP) to log in to your MyMess account is: {otp}
 Please enter this code within 5 minutes to complete your login.
 If you did not request this OTP, please ignore this message.
-Regards,  
-MyMess Team  
-                    """,
-            from_email='noreplymymessbooking@gmail.com',
-            recipient_list=[email],
-            fail_silently=False,
-        )
 
+Regards,  
+MyMess Team
+            """,
+            from_email='noreplymymessbooking@gmail.com',
+            recipient_list=[email]
+        )
 
         return render(request, 'accounts/login.html', {
             'email': email,
