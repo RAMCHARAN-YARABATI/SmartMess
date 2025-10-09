@@ -73,17 +73,6 @@ WSGI_APPLICATION = 'Smart_Meal_Management_System.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 '''
 DATABASES = {
-    'default': dj_database_url.config(default=os.environ.get(postgresql://smart_meal_db_3irs_user:Z5RCDyZZ9q1M1dSH4laKcbOozVB7wN6s@dpg-d27ic2fdiees73cl59fg-a.oregon-postgres.render.com/smart_meal_db_3irs))
-}
-
-
-DATABASES = {
-    'default': dj_database_url.config(default='postgresql://root:HiLXOn42anw4sd9bL5J2BIVC0caf5GCA@dpg-d3jndol6ubrc73cvloh0-a.oregon-postgres.render.com/smart_meal_db_56h9')
-}
-
-'''
-
-DATABASES = {
     'default': {
         'ENGINE': 'mssql',
         'NAME': 'Smart_Meal_Management_System',  # Your database name
@@ -94,6 +83,15 @@ DATABASES = {
             'trusted_connection': 'yes',  # Since you're using Windows Authentication
         },
     }
+}
+
+
+
+'''
+
+
+DATABASES = {
+    'default': dj_database_url.config(default='postgresql://root:HiLXOn42anw4sd9bL5J2BIVC0caf5GCA@dpg-d3jndol6ubrc73cvloh0-a.oregon-postgres.render.com/smart_meal_db_56h9')
 }
 
 
