@@ -76,7 +76,7 @@ WSGI_APPLICATION = 'Smart_Meal_Management_System.wsgi.application'
 
 
 DATABASES = {
-    'default': dj_database_url.config(default='postgresql://smart_meal_db_p49l_user:OjPrcpNOCzzB3b4tnTV3PMiyDWDtcwdJ@dpg-d3jkvhp5pdvs73eh2ki0-a.oregon-postgres.render.com/smart_meal_db_p49l')
+    'default': dj_database_url.config(default='postgresql://db_f51e_user:aBDdPLdVzH3hS8DuByIjqo1Wdo2MCoWT@dpg-d3jl55h5pdvs73eh6tfg-a.oregon-postgres.render.com/db_f51e')
 }
 
 
