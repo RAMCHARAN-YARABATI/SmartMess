@@ -1,0 +1,35 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Confirm Meal</title>
+  <link rel="stylesheet" href="{% static 'accounts/confirm.css' %}">
+</head>
+<body>
+  <div class="confirm-box">
+    <h2>Confirm {{ slot.name }} ({{ day|title }})</h2>
+    <p>Date: {{ date }}</p>
+
+    {% if already_booked %}
+      <p style="color:red;">You have already booked this meal.</p>
+      <a href="{% url 'orders' %}" class="home-button">Back to Orders</a>
+    {% else %}
+      {% if is_open %}
+        <form method="post" action="{% url 'apply_meal' slot.id day %}">
+          {% csrf_token %}
+          <label><input type="checkbox" required> I confirm this booking</label><br><br>
+          <button type="submit" class="apply-btn">Apply</button>
+          <a href="{% url 'orders' %}" class="cancel-btn">Cancel</a>
+        </form>
+      {% else %}
+        <p style="color:red;">Booking window is closed.</p>
+        <button disabled class="apply-btn disabled">Apply (Closed)</button><br><br>
+        <a href="{% url 'orders' %}" class="home-button">Back to Orders</a>
+      {% endif %}
+    {% endif %}
+  </div>
+</body>
+</html>
+
