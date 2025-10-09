@@ -58,8 +58,10 @@ def signup_view(request):
 
 
 
-# Store OTPs temporarily
+# Thread-safe OTP storage
 otp_storage = {}
+
+# Utility function to send email asynchronously
 def send_async_mail(subject, message, from_email, recipient_list):
     threading.Thread(
         target=send_mail,
@@ -67,17 +69,19 @@ def send_async_mail(subject, message, from_email, recipient_list):
         kwargs={'fail_silently': False}
     ).start()
 
+
 def send_otp_view(request):
     if request.method == 'POST':
         email = request.POST.get('email')
 
+        # Check if email exists
         if not StudentUser.objects.filter(email=email).exists():
             return render(request, 'accounts/login.html', {
-                'error': ' This email is not registered. Please sign up first.',
+                'error': 'This email is not registered. Please sign up first.',
                 'email': email
             })
-        ''' Also passes the email back so the user doesn't need to re-enter it.'''
 
+        # Check OTP input
         if 'otp1' in request.POST:
             otp_entered = ''.join([
                 request.POST.get('otp1', ''),
@@ -88,18 +92,21 @@ def send_otp_view(request):
 
             if otp_storage.get(email) == otp_entered:
                 request.session['user_email'] = email
+                # Clear OTP after successful login
+                otp_storage.pop(email, None)
                 return redirect('home')
             else:
                 return render(request, 'accounts/login.html', {
                     'email': email,
                     'otp_sent': True,
-                    'error': " Invalid OTP. Try again.",
+                    'error': "Invalid OTP. Try again.",
                 })
 
-        # Generate and send OTP
+        # Generate OTP and store
         otp = str(random.randint(1000, 9999))
         otp_storage[email] = otp
-        
+
+        # Send OTP asynchronously
         send_async_mail(
             subject='Your One-Time Password (OTP) for MyMess',
             message=f"""
