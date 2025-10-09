@@ -1,5 +1,5 @@
 
-import random,io, uuid, qrcode, threading
+import random,io, uuid, qrcode, 
 from django.shortcuts import render, redirect,get_object_or_404, redirect
 from .models import  StudentUser, BookingRecord, MealSlot, SpecialOrderSlot
 from django.contrib.auth.hashers import make_password
@@ -11,6 +11,9 @@ from django.contrib import messages
 from datetime import timedelta, datetime
 from django.views.decorators.http import require_POST
 from .utils  import SHOW_CUTOFF_TIMES, is_window_open, is_qr_visible_for_meal, is_special_order_window_open
+import threading
+from django.shortcuts import render, redirect
+from django.core.mail import send_mail
 
 
 
