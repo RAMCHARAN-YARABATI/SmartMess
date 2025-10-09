@@ -91,7 +91,7 @@ DATABASES = {
 
 
 DATABASES = {
-    'default': dj_database_url.config(default='postgresql://root:HiLXOn42anw4sd9bL5J2BIVC0caf5GCA@dpg-d3jndol6ubrc73cvloh0-a.oregon-postgres.render.com/smart_meal_db_56h9')
+    'default': dj_database_url.config(default='postgresql://smart_meal_db_q3yg_user:BQRzRYu6fdLQVlQ0EItkSijfJ2rtFwdK@dpg-d3ju3jmmcj7s73fku4c0-a.virginia-postgres.render.com/smart_meal_db_q3yg')
 }
 
 
