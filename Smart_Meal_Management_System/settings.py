@@ -81,8 +81,6 @@ DATABASES = {
     'default': dj_database_url.config(default='postgresql://root:HiLXOn42anw4sd9bL5J2BIVC0caf5GCA@dpg-d3jndol6ubrc73cvloh0-a.oregon-postgres.render.com/smart_meal_db_56h9')
 }
 
-'''
-
 DATABASES = {
     'default': {
         'ENGINE': 'mssql',
@@ -95,6 +93,27 @@ DATABASES = {
         },
     }
 }
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'Smart_Meal_Management_System',        # your database name
+        'USER': 'postgres',      # your username
+        'PASSWORD': '123',     # your password
+        'HOST': 'localhost',          # or IP address / domain
+        'PORT': '5432',               # default PostgreSQL port
+    }
+}
+
+
+'''
+
+
+DATABASES = {
+    'default': dj_database_url.config(default='postgresql://smart_meal_db_p40b_user:tF4bF2WPbUroCu2DbslZ6gIF5WQpq9YC@dpg-d3kg3ml6ubrc73dupov0-a.oregon-postgres.render.com/smart_meal_db_p40b')
+}
+
 
 
 
