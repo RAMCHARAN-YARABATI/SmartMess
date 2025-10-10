@@ -11,4 +11,4 @@ pytz==2025.2
 sqlparse==0.5.3
 tzdata==2025.2
 pyodbc==5.2.0
-mssql-django==1.5  
+ 
