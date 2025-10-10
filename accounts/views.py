@@ -52,23 +52,8 @@ def signup_view(request):
 
     return render(request, 'accounts/signup.html')
 
-import random
-import threading
-from django.shortcuts import render, redirect
-from django.core.mail import send_mail
-from .models import StudentUser
-
 # Thread-safe OTP storage
 otp_storage = {}
-
-def send_async_mail(subject, message, from_email, recipient_list):
-    def send():
-        try:
-            send_mail(subject, message, from_email, recipient_list, fail_silently=False)
-        except Exception as e:
-            print(f"Email sending failed: {e}")  # Check Render logs
-    threading.Thread(target=send).start()
-
 
 def send_otp_view(request):
     if request.method == 'POST':
@@ -108,7 +93,7 @@ def send_otp_view(request):
         otp_storage[email] = otp
 
         # Send OTP asynchronously
-        send_async_mail(
+        send_mail(
             subject='Your One-Time Password (OTP) for MyMess',
             message=f"""
 Hello,
@@ -662,4 +647,5 @@ MyMess Team   """
         'selected_exchange_date': '',
         'selected_receiver_email': '',
     })
+
 
