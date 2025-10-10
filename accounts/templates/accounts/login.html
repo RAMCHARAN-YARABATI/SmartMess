@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login with OTP</title>
+  <link rel="stylesheet" href="{% static 'accounts/style.css' %}">
+</head>
+<body>
+  <div class="wrapper">
+    <h1>Login</h1>
+    <form method="post" action="{% url 'login' %}">
+      {% csrf_token %}
+      {% if error %}
+        <p style="color: red; text-align: center;">{{ error }}</p>
+      {% endif %}
+      {% if message %}
+        <p style="color: green; text-align: center;">{{ message }}</p>
+      {% endif %}
+
+      <div>
+        <label for="email"><span>@</span></label>
+        <input required type="email" id="email" name="email" placeholder="Enter your email" value="{{ email|default:'' }}">
+      </div> 
+
+      {% if otp_sent %}
+        <div class="otp-boxes">
+          <input type="text" name="otp1" maxlength="1" required autofocus oninput="moveNext(this, 'otp2')" onkeydown="moveback(event,this,null)">
+          <input type="text" name="otp2" maxlength="1" required oninput="moveNext(this, 'otp3')" onkeydown="moveback(event,this,'otp1')">
+          <input type="text" name="otp3" maxlength="1" required oninput="moveNext(this, 'otp4')" onkeydown="moveback(event,this,'otp2')">
+          <input type="text" name="otp4" maxlength="1" required onkeydown="moveback(event,this,'otp3')">
+        </div>
+      {% endif %}
+      <div>
+        <button type="submit">
+          {% if otp_sent %}
+            Verify OTP
+          {% else %}
+            Send OTP
+          {% endif %}
+        </button>
+      </div>
+      <p>Create Account <a href='{% url "signup" %}'> Signup</a></p>
+    </form>
+  </div>
+  <script>
+    function moveNext(current, nextId) {
+      if (current.value.length === 1) {
+        const nextinput = document.getElementsByName(nextId)[0].focus();
+        if (nextinput) nextinput.focus();
+      }
+    }
+
+    function moveback(event,current,prevname) {
+      if (event.key === 'Backspace' && current.value === '' && prevname) {
+        const previnput = document.getElementsByName(prevname)[0];  
+        if (previnput) previnput.focus();
+      }
+    }
+  </script>
+</body>
+</html>
+
