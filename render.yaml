@@ -12,7 +12,7 @@ services:
     envVars:
       - key: DATABASE_URL
         fromDatabase:
-          name: SmartMealDB  
+          name: smart_meal_db_p40b_user
           property: connectionString
       - key: SECRET_KEY
         value: django-insecure-1li!-!0h%97-)(&8eg@mr5q&=h-6lmb#^c&5en5=0ttal2h@tg
@@ -21,7 +21,7 @@ services:
       - key: EMAIL_HOST_USER
         value: noreplymymessbooking@gmail.com
       - key: EMAIL_HOST_PASSWORD
-        value: smlz qwcw bksm wvlb
+        value: pguy uekt uric vnoj
       - key: DEBUG
         value: 'False'
     plan: free 

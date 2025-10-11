@@ -73,13 +73,9 @@ WSGI_APPLICATION = 'Smart_Meal_Management_System.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 '''
 DATABASES = {
-    'default': dj_database_url.config(default=os.environ.get(postgresql://smart_meal_db_3irs_user:Z5RCDyZZ9q1M1dSH4laKcbOozVB7wN6s@dpg-d27ic2fdiees73cl59fg-a.oregon-postgres.render.com/smart_meal_db_3irs))
+    'default': dj_database_url.config(default='postgresql://smart_meal_db_p40b_user:tF4bF2WPbUroCu2DbslZ6gIF5WQpq9YC@dpg-d3kg3ml6ubrc73dupov0-a.oregon-postgres.render.com/smart_meal_db_p40b')
 }
 
-
-DATABASES = {
-    'default': dj_database_url.config(default='postgresql://root:HiLXOn42anw4sd9bL5J2BIVC0caf5GCA@dpg-d3jndol6ubrc73cvloh0-a.oregon-postgres.render.com/smart_meal_db_56h9')
-}
 
 DATABASES = {
     'default': {
@@ -151,8 +147,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'noreplymymessbooking@gmail.com'
-EMAIL_HOST_PASSWORD = 'smlz qwcw bksm wvlb' 
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'noreplymymessbooking@gmail.com')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'pguy uekt uric vnoj') 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
@@ -161,10 +157,8 @@ EMAIL_HOST_PASSWORD = 'smlz qwcw bksm wvlb'
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles_build' 
-
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-# ...
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
@@ -172,6 +166,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+
+
 
 
 

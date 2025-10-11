@@ -52,71 +52,32 @@ def signup_view(request):
 
     return render(request, 'accounts/signup.html')
 
-# Thread-safe OTP storage
-otp_storage = {}
-
-def send_otp_view(request):
+def login_view(request):
     if request.method == 'POST':
         email = request.POST.get('email')
+        password = request.POST.get('password') 
     
-    
-        # Check if email exists
-        if not StudentUser.objects.filter(email=email).exists():
+        if not email or not password:
             return render(request, 'accounts/login.html', {
-                'error': 'This email is not registered. Please sign up first.',
-                'email': email
+                'error': 'Please enter both email and password.'
             })
 
-        # Check OTP input
-        if 'otp1' in request.POST:
-            otp_entered = ''.join([
-                request.POST.get('otp1', ''),
-                request.POST.get('otp2', ''),
-                request.POST.get('otp3', ''),
-                request.POST.get('otp4', ''),
-            ])
+        try:
+            user = StudentUser.objects.get(email=email)
+        except StudentUser.DoesNotExist:
+            return render(request, 'accounts/login.html', {
+                'error': 'Invalid credentials. Please check your email.'
+            })
 
-            if otp_storage.get(email) == otp_entered:
-                request.session['user_email'] = email
-                # Clear OTP after successful login
-                otp_storage.pop(email, None)
-                return redirect('home')
-            else:
-                return render(request, 'accounts/login.html', {
-                    'email': email,
-                    'otp_sent': True,
-                    'error': "Invalid OTP. Try again.",
-                })
-
-        # Generate OTP and store
-        otp = str(random.randint(1000, 9999))
-        otp_storage[email] = otp
-
-        # Send OTP asynchronously
-        send_mail(
-            subject='Your One-Time Password (OTP) for MyMess',
-            message=f"""
-Hello,
-
-Your One-Time Password (OTP) to log in to your MyMess account is: {otp}
-Please enter this code within 5 minutes to complete your login.
-If you did not request this OTP, please ignore this message.
-
-Regards,  
-MyMess Team
-            """,
-            from_email='noreplymymessbooking@gmail.com',
-            recipient_list=[email]
-        )
-
-        return render(request, 'accounts/login.html', {
-            'email': email,
-            'otp_sent': True,
-            'message': 'OTP sent to your email!',
-        })
+        if check_password(password, user.password):
+            request.session['user_email'] = email
+            return redirect('home')
+        else:
+            return render(request, 'accounts/login.html', {
+                'error': 'Invalid credentials. Please check your password.'
+            })
 
     return render(request, 'accounts/login.html') 
-
 
 #  Session-based “login required” decorator
 def session_login_required(view_func):
@@ -647,6 +608,9 @@ MyMess Team   """
         'selected_exchange_date': '',
         'selected_receiver_email': '',
     })
+
+
+
 
 
 

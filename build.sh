@@ -1,10 +1,9 @@
-
 #!/usr/bin/env bash
 
-# 1. Install Python dependencies using the generic pip3 command
-# This is often the most reliable command in Vercel's path
+# 1. Install dependencies using the generic pip3 command
 echo "Installing dependencies from requirements.txt..."
-pip3 install -r requirements.txt
+# Use python3 -m pip to ensure the right path, as simple pip3 sometimes fails
+python3 -m pip install -r requirements.txt
 
 # 2. Run migrations
 echo "Running database migrations..."
@@ -13,4 +12,4 @@ python3 manage.py migrate --noinput
 
 # 3. Collect static files
 echo "Collecting static files..."
-python3 manage.py collectstatic
+python3 manage.py collectstatic --noinput --clear
