@@ -2,7 +2,7 @@
 import random,io, uuid, qrcode
 from django.shortcuts import render, redirect,get_object_or_404
 from .models import  StudentUser, BookingRecord, MealSlot, SpecialOrderSlot
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import make_password, check_password
 from django.core.mail import send_mail
 from django.http import FileResponse
 from django.core.files.base import ContentFile
@@ -608,6 +608,7 @@ MyMess Team   """
         'selected_exchange_date': '',
         'selected_receiver_email': '',
     })
+
 
 
 
