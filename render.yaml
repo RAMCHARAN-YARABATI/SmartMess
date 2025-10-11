@@ -21,7 +21,7 @@ services:
       - key: EMAIL_HOST_USER
         value: noreplymymessbooking@gmail.com
       - key: EMAIL_HOST_PASSWORD
-        value: smlz qwcw bksm wvlb
+        value: pguy uekt uric vnoj
       - key: DEBUG
         value: 'False'
     plan: free 
