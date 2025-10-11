@@ -5,7 +5,7 @@ from Smart_Meal_Management_System import settings
 
 
 urlpatterns = [
-    path('', views.send_otp_view, name='login'),
+    path('', views.login_view, name='login'),
     path('signup/', views.signup_view, name='signup'),
     path('home/', views.home_view, name='home'),
     path('logout/', views.logout_view, name='logout'),
