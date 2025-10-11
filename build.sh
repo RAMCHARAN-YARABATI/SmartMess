@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
 
-# Fix 1: Ensure the correct interpreter is used for pip
+# 1. Install Python dependencies using explicit paths and -m pip
+# This format is the most robust way to ensure installation runs
 echo "Installing dependencies from requirements.txt..."
-python3.9 -m pip install -r requirements.txt
+/usr/bin/python3.9 -m pip install -r requirements.txt
 
-# Fix 2 & 3: Ensure the correct interpreter is used for manage.py
+# 2. Run migrations
 echo "Running database migrations..."
-python3.9 manage.py makemigrations --noinput
-python3.9 manage.py migrate --noinput
+/usr/bin/python3.9 manage.py makemigrations --noinput
+/usr/bin/python3.9 manage.py migrate --noinput
 
-# Fix 4: Ensure the correct interpreter is used for collectstatic
+# 3. Collect static files
 echo "Collecting static files..."
-python3.9 manage.py collectstatic --noinput --clear
+/usr/bin/python3.9 manage.py collectstatic --noinput --clear
