@@ -10,7 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
-import os, dj_database_url
+import os
+import dj_database_url
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,13 +21,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-1li!-!0h%97-)(&8eg@mr5q&=h-6lmb#^c&5en5=0ttal2h@tg'
+# SECURITY WARNING: Secrets must be pulled from environment variables!
+# 🚨 SECURITY FIX: Reads SECRET_KEY from Vercel ENV
+SECRET_KEY = os.environ.get('SECRET_KEY', 'default-insecure-key-for-local-fallback-only')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True  # For production
+# 🚨 SECURITY FIX: Reads DEBUG status from Vercel ENV
+# Vercel should set DEBUG=False in its environment variables
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['*','.vercel.app']
+# 🚨 SECURITY FIX: Reads ALLOWED_HOSTS from Vercel ENV
+# You must set ALLOWED_HOSTS = mymess.com,.vercel.app in the Vercel dashboard
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
 
 INSTALLED_APPS = [
     'accounts',
@@ -39,7 +44,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    # WhiteNoise must be placed BEFORE SecurityMiddleware for Django 5.x/later
+    "whitenoise.middleware.WhiteNoiseMiddleware", 
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -69,22 +75,16 @@ TEMPLATES = [
 WSGI_APPLICATION = 'Smart_Meal_Management_System.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
-
-
+# Database Configuration
+# 🚨 CRITICAL DB FIX: This reads the DATABASE_URL environment variable 
+# (which must be set in Vercel to your external Postgres database).
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Smart_Meal_Management_System',        # your database name
-        'USER': 'postgres',      # your username
-        'PASSWORD': '123',     # your password
-        'HOST': 'localhost',          # or IP address / domain
-        'PORT': '5432',               # default PostgreSQL port
-    }
+    'default': dj_database_url.config(
+        default=os.environ.get('postgresql://smart_meal_db_p40b_user:tF4bF2WPbUroCu2DbslZ6gIF5WQpq9YC@dpg-d3kg3ml6ubrc73dupov0-a.oregon-postgres.render.com/smart_meal_db_p40b'),
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
 }
-
 
 
 # Password validation
@@ -117,19 +117,31 @@ USE_I18N = True
 
 USE_TZ = True
 
+# Email Settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+# 🚨 SECURITY FIX: Reads email credentials from Vercel ENV
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'noreplymymessbooking@gmail.com')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'smlz qwcw bksm wvlb')
+
 
 # Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/5.2/howto/static-files/
+
 STATIC_URL = '/static/'
+# 🚨 CRITICAL STATIC PATH FIX: Must match 'distDir': "staticfiles_build" in vercel.json
 STATIC_ROOT = BASE_DIR / 'staticfiles_build' 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-# This storage handles compression and caching for WhiteNoise
 STORAGES = {
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
-
 # Default primary key field type
+# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
