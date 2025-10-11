@@ -10,8 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
-import os
-import dj_database_url
+import os, dj_database_url
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -19,12 +18,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
-SECRET_KEY = os.environ.get('SECRET_KEY', 'default-insecure-key-for-local-fallback-only')
+# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = 'django-insecure-1li!-!0h%97-)(&8eg@mr5q&=h-6lmb#^c&5en5=0ttal2h@tg'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+DEBUG = True  # For production
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
+ALLOWED_HOSTS = ['*','.vercel.app']
 
 INSTALLED_APPS = [
     'accounts',
@@ -37,8 +39,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    # WhiteNoise must be placed BEFORE SecurityMiddleware in Django 5.x/later
-    "whitenoise.middleware.WhiteNoiseMiddleware", 
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -68,32 +69,53 @@ TEMPLATES = [
 WSGI_APPLICATION = 'Smart_Meal_Management_System.wsgi.application'
 
 
-# Database Configuration
+# Database
+# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+
+
+
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get('postgresql://smart_meal_db_p40b_user:tF4bF2WPbUroCu2DbslZ6gIF5WQpq9YC@dpg-d3kg3ml6ubrc73dupov0-a.oregon-postgres.render.com/smart_meal_db_p40b'),
-        conn_max_age=600,
-        conn_health_checks=True,
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'Smart_Meal_Management_System',        # your database name
+        'USER': 'postgres',      # your username
+        'PASSWORD': '123',     # your password
+        'HOST': 'localhost',          # or IP address / domain
+        'PORT': '5432',               # default PostgreSQL port
+    }
 }
 
 
 
+# Password validation
+# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
+
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
+
 
 # Internationalization
+# https://docs.djangoproject.com/en/5.2/topics/i18n/
+
 LANGUAGE_CODE = 'en-us'
+
 TIME_ZONE = 'Asia/Kolkata'
+
 USE_I18N = True
+
 USE_TZ = True
-
-
-# Email Settings
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
 
 
 # Static files (CSS, JavaScript, Images)
@@ -112,6 +134,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
 
 
 
