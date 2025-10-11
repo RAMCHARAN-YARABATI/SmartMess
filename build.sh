@@ -1,6 +1,8 @@
+
 #!/usr/bin/env bash
 
-# 1. Install Python dependencies using the global pip3 executable
+# 1. Install Python dependencies using the generic pip3 command
+# This is often the most reliable command in Vercel's path
 echo "Installing dependencies from requirements.txt..."
 pip3 install -r requirements.txt
 
