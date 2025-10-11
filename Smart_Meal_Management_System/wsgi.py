@@ -16,6 +16,4 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Smart_Meal_Management_System.se
 from whitenoise import WhiteNoise
 
 application = get_wsgi_application()
-application = WhiteNoise(application, root=os.path.join(BASE_DIR, 'staticfiles_build'))
-
 app = application
