@@ -10,4 +10,3 @@ colorama==0.4.6
 pytz==2025.2
 sqlparse==0.5.3
 tzdata==2025.2
-
