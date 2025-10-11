@@ -1,20 +1,23 @@
 {
   "builds": [
     {
-      "src": "manage.py",
+      "src": "Smart_Meal_Management_System/wsgi.py",
       "use": "@vercel/python",
-      "config": { "maxLambdaSize": "50mb" }
+      "config": { "maxLambdaSize": "50mb", "runtime": "python3.9" }
+    },
+    {
+      "src": "build.sh",
+      "use": "@vercel/static-build",
+      "config": { "distDir": "staticfiles_build" }
     }
   ],
   "routes": [
     { "src": "/static/(.*)", "dest": "/static/$1" },
-    { "src": "/(.*)", "dest": "manage.py" }
+    { "src": "/(.*)", "dest": "Smart_Meal_Management_System/wsgi.py" }
   ],
   "env": {
-    "SECRET_KEY": "django-insecure-1li!-!0h%97-)(&8eg@mr5q&=h-6lmb#^c&5en5=0ttal2h@tg",
     "DJANGO_SETTINGS_MODULE": "Smart_Meal_Management_System.settings",
     "DEBUG": "False",
-    "EMAIL_HOST_USER": "noreplymymessbooking@gmail.com",
-    "EMAIL_HOST_PASSWORD": "smlz qwcw bksm wvlb"
+    "EMAIL_HOST_USER": "noreplymymessbooking@gmail.com"
   }
 }
