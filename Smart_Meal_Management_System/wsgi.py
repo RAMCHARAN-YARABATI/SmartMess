@@ -13,8 +13,6 @@ from Smart_Meal_Management_System.settings import BASE_DIR
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Smart_Meal_Management_System.settings')
 
-application = get_wsgi_application()
-
 from whitenoise import WhiteNoise
 
 application = get_wsgi_application()
