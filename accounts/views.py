@@ -54,22 +54,9 @@ def signup_view(request):
 
 # Thread-safe OTP storage
 otp_storage = {}
-import threading
-from django.core.mail import send_mail
-
-def send_async_mail(subject, message, from_email, recipient_list):
-    def send():
-        try:
-            send_mail(subject, message, from_email, recipient_list, fail_silently=False)
-        except Exception as e:
-            print(f"Email sending failed: {e}")  # Check Render logs
-    threading.Thread(target=send).start()
-
-
 def send_otp_view(request):
     if request.method == 'POST':
         email = request.POST.get('email')
-    
     
         # Check if email exists
         if not StudentUser.objects.filter(email=email).exists():
@@ -78,7 +65,7 @@ def send_otp_view(request):
                 'email': email
             })
 
-        # Check OTP input
+        # Check OTP input (Your existing OTP verification logic)
         if 'otp1' in request.POST:
             otp_entered = ''.join([
                 request.POST.get('otp1', ''),
@@ -86,10 +73,9 @@ def send_otp_view(request):
                 request.POST.get('otp3', ''),
                 request.POST.get('otp4', ''),
             ])
-
+            # ... rest of OTP verification ...
             if otp_storage.get(email) == otp_entered:
                 request.session['user_email'] = email
-                # Clear OTP after successful login
                 otp_storage.pop(email, None)
                 return redirect('home')
             else:
@@ -99,14 +85,16 @@ def send_otp_view(request):
                     'error': "Invalid OTP. Try again.",
                 })
 
+
         # Generate OTP and store
         otp = str(random.randint(1000, 9999))
         otp_storage[email] = otp
 
-        # Send OTP asynchronously
-        send_async_mail(
-            subject='Your One-Time Password (OTP) for MyMess',
-            message=f"""
+        # -----------------------------------------------------------------
+        # MODIFICATION: SEND OTP SYNCHRONOUSLY FOR DEBUGGING
+        # -----------------------------------------------------------------
+        subject='Your One-Time Password (OTP) for MyMess'
+        message=f"""
 Hello,
 
 Your One-Time Password (OTP) to log in to your MyMess account is: {otp}
@@ -115,15 +103,33 @@ If you did not request this OTP, please ignore this message.
 
 Regards,  
 MyMess Team
-            """,
-            from_email='noreplymymessbooking@gmail.com',
-            recipient_list=[email]
-        )
+        """
+        try:
+            # THIS IS THE SYNCHRONOUS CALL THAT WILL BLOCK AND THROW THE ERROR
+            # It will fail and log the exception in your Render Dashboard.
+            send_mail(
+                subject=subject,
+                message=message,
+                from_email='noreplymymessbooking@gmail.com',
+                recipient_list=[email],
+                fail_silently=False # Force exception to be thrown
+            )
+            # If successful, continue:
+            message_to_user = 'OTP sent to your email!'
 
+        except Exception as e:
+            # Print the error clearly in the Render logs
+            print(f"CRITICAL SMTP ERROR: {type(e).__name__}: {e}")
+            message_to_user = 'Error: Could not send OTP email. Check logs for SMTP error.'
+            
+            # If the error is ConnectionRefused/Timeout, it confirms Render's firewall is the issue.
+            # If the error is SMTPAuthenticationError, it confirms Gmail security block is the issue.
+        # -----------------------------------------------------------------
+        
         return render(request, 'accounts/login.html', {
             'email': email,
             'otp_sent': True,
-            'message': 'OTP sent to your email!',
+            'message': message_to_user,
         })
 
     return render(request, 'accounts/login.html') 
@@ -658,6 +664,7 @@ MyMess Team   """
         'selected_exchange_date': '',
         'selected_receiver_email': '',
     })
+
 
 
 
