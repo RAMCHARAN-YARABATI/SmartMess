@@ -24,7 +24,7 @@ services:
         value: smlz qwcw bksm wvlb
       - key: DEBUG
         value: 'False'
-    plan: free
+    plan: free 
 
 databases:
   - name: SmartMealDB  
