@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# 🚨 CRITICAL FIX: Run installation inside the script to ensure environment is loaded
-
 # 1. Install dependencies using the generic pip3 command
 echo "Installing dependencies from requirements.txt..."
 # Use python3 -m pip to ensure the right path, as simple pip3 sometimes fails
