@@ -17,7 +17,7 @@ The project ensures **fair, transparent, and efficient mess management** by inte
 
 ## 🚀 Live Demo  
 
-👉 [Click here to try SmartMess](https://smartmess-98lu.onrender.com/)  
+👉 [Click here to try SmartMess](https://smartmess-98lu.onrender.com)  
 
 ---
 
