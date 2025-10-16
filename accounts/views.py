@@ -342,62 +342,60 @@ def special_orders_view(request):
         'today': today,
     })
 
+from django.db import transaction
 
 @require_POST
 @session_login_required
 def apply_special_order(request, slot_id):
-    """
-    Handles the POST request to book a special order.
-    """
     user = StudentUser.objects.get(email=request.session["user_email"])
     meal_slot = get_object_or_404(MealSlot, id=slot_id)
     today = timezone.localdate()
 
-    special_slot = get_object_or_404(SpecialOrderSlot, meal_type=meal_slot, date=today)
-
-    
-    if not is_special_order_window_open(meal_slot.name):
-        messages.error(request, "Special order window is closed.")
-        return redirect('special_orders')
-
-    if special_slot.available_slots <= 0:
-        messages.error(request, f"No slots available for {meal_slot.name} special order.")
-        return redirect('special_orders')
-
-    if BookingRecord.objects.filter(user=user, meal_type=meal_slot, date=today, is_special_order=False, status="Booked").exists():
-        messages.warning(request, f"You already have a regular booking for {meal_slot.name} today.")
-        return redirect('special_orders')
-
-    if BookingRecord.objects.filter(user=user, meal_type=meal_slot, date=today, is_special_order=True, status="Booked").exists():
-        messages.warning(request, f"You already have a special order for {meal_slot.name} today.")
-        return redirect('special_orders')
-
-    if user.refund_wallet < meal_slot.price:
-        messages.error(request, "Insufficient balance for special order.")
-        return redirect('special_orders')
-
-   
     try:
-        special_slot.available_slots -= 1
-        special_slot.save()
+        with transaction.atomic():
+            # Lock this row so that no one else can modify it until we're done
+            special_slot = SpecialOrderSlot.objects.select_for_update().get(
+                meal_type=meal_slot, date=today
+            )
 
-        BookingRecord.objects.create(
-            user=user,
-            meal_type=meal_slot,
-            date=today,
-            status="Booked",
-            is_special_order=True 
-        )
+            if not is_special_order_window_open(meal_slot.name):
+                messages.error(request, "Special order window is closed.")
+                return redirect('special_orders')
 
-        user.refund_wallet -= meal_slot.price
-        user.save(update_fields=["refund_wallet"])
+            if special_slot.available_slots <= 0:
+                messages.error(request, f"No slots available for {meal_slot.name} special order.")
+                return redirect('special_orders')
 
-        messages.success(request, f"Special order for {meal_slot.name} booked successfully!")
+            if BookingRecord.objects.filter(user=user, meal_type=meal_slot, date=today, status="Booked").exists():
+                messages.warning(request, f"You already booked {meal_slot.name} today.")
+                return redirect('special_orders')
+
+            if user.refund_wallet < meal_slot.price:
+                messages.error(request, "Insufficient balance.")
+                return redirect('special_orders')
+
+            # Deduct slot safely
+            special_slot.available_slots -= 1
+            special_slot.save()
+
+            BookingRecord.objects.create(
+                user=user,
+                meal_type=meal_slot,
+                date=today,
+                status="Booked",
+                is_special_order=True,
+            )
+
+            user.refund_wallet -= meal_slot.price
+            user.save(update_fields=["refund_wallet"])
+
+            messages.success(request, f"Special order for {meal_slot.name} booked successfully!")
+
     except Exception as e:
         messages.error(request, f"Error booking special order: {e}")
-        special_slot.available_slots += 1
-        special_slot.save()
+
     return redirect('special_orders')
+
 
 @session_login_required
 def exchange_qr_view(request):
@@ -608,6 +606,7 @@ MyMess Team   """
         'selected_exchange_date': '',
         'selected_receiver_email': '',
     })
+
 
 
 
