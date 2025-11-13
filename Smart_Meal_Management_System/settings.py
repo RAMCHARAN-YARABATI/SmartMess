@@ -107,7 +107,7 @@ DATABASES = {
 
 
 DATABASES = {
-    'default': dj_database_url.config(default='postgresql://smart_meal_db_p40b_user:tF4bF2WPbUroCu2DbslZ6gIF5WQpq9YC@dpg-d3kg3ml6ubrc73dupov0-a.oregon-postgres.render.com/smart_meal_db_p40b')
+    'default': dj_database_url.config(default='postgresql://smart_meal_db_hyvd_user:prmujlWh0hJRSNv036lKcvp8gFnqSzV0@dpg-d4at5dfpm1nc739f2fdg-a.oregon-postgres.render.com/smart_meal_db_hyvd')
 }
 
 
@@ -166,6 +166,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
 
 
 
