@@ -73,7 +73,7 @@ WSGI_APPLICATION = 'Smart_Meal_Management_System.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 '''
 DATABASES = {
-    'default': dj_database_url.config(default='postgresql://smart_meal_db_p40b_user:tF4bF2WPbUroCu2DbslZ6gIF5WQpq9YC@dpg-d3kg3ml6ubrc73dupov0-a.oregon-postgres.render.com/smart_meal_db_p40b')
+    'default': dj_database_url.config(default='postgresql://smart_meal_db_kgi5_user:RThjQGRfGy6aM3X7tohPtUIZqFan0rUt@dpg-d7j2k21kh4rs73bb1smg-a.oregon-postgres.render.com/smart_meal_db_kgi5')
 }
 
 
